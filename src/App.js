@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 
-const url="https://localhost:44302/api/empresas/";
+const url="http://localhost:3200/";
 
 class App extends Component {
 state={
@@ -16,16 +16,21 @@ state={
   modalEliminar: false,
   form:{
     id: '',
-    nombre: '',
-    pais: '',
-    capital_bursatil: '',
+    Nombre: '',
+    Apellido: '',
+    Tipo_de_documento: '',
+    Documento_de_identidad: '',
+    Correo_Electrónico: '',
+    Celular: '',
+    Fecha_de_Nacimiento:'',
+    url:'',
     tipoModal: ''
   }
 }
 
 peticionGet=()=>{
 axios.get(url).then(response=>{
-  this.setState({data: response.data});
+  this.setState({data: response.data.row});  
 }).catch(error=>{
   console.log(error.message);
 })
@@ -59,14 +64,14 @@ modalInsertar=()=>{
   this.setState({modalInsertar: !this.state.modalInsertar});
 }
 
-seleccionarEmpresa=(empresa)=>{
+seleccionarPersona=(Persona)=>{
   this.setState({
     tipoModal: 'actualizar',
     form: {
-      id: empresa.id,
-      nombre: empresa.nombre,
-      pais: empresa.pais,
-      capital_bursatil: empresa.capital_bursatil
+      id: Persona.id,
+      nombre: Persona.nombre,
+      pais: Persona.pais,
+      capital_bursatil: Persona.capital_bursatil
     }
   })
 }
@@ -92,30 +97,41 @@ console.log(this.state.form);
   return (
     <div className="App">
     <br /><br /><br />
-  <button className="btn btn-success" onClick={()=>{this.setState({form: null, tipoModal: 'insertar'}); this.modalInsertar()}}>Agregar Empresa</button>
+  <button className="btn btn-success" onClick={()=>{this.setState({form: null, tipoModal: 'insertar'}); this.modalInsertar()}}>Agregar Persona</button>
   <br /><br />
     <table className="table ">
       <thead>
         <tr>
           <th>ID</th>
           <th>Nombre</th>
-          <th>País</th>
-          <th>Capital Bursatil (en millones de USD)</th>
+          <th>Apellido</th>
+          <th>Tipo de documento de identidad</th>
+          <th>Documento de identidad</th>
+          <th>Correo Electrónico</th>
+          <th>Celular</th>
+          <th>Fecha de Nacimiento</th>
+          <th>Archivo</th>  
           <th>Acciones</th>
         </tr>
       </thead>
-      <tbody>
-        {this.state.data.map(empresa=>{
+     <tbody>
+        {this.state.data.map(persona=>{
           return(
             <tr>
-          <td>{empresa.id}</td>
-          <td>{empresa.nombre}</td>
-          <td>{empresa.pais}</td>
-          <td>{new Intl.NumberFormat("en-EN").format(empresa.capital_bursatil)}</td>
+          <td>{persona.id_persona}</td>
+          <td>{persona.Nombre}</td>
+          <td>{persona.Apellido}</td>
+          <td>{persona.Tipo_de_documento}</td>
+          <td>{persona.Documento_de_identidad}</td>
+          <td>{persona.Correo_Electrónico}</td>
+          <td>{persona.Celular}</td>
+          <td>{persona.Fecha_de_Nacimiento}</td>
+          <td>{persona.url}</td>
+          {/* <td>{new Intl.NumberFormat("en-EN").format(empresa.capital_bursatil)}</td>  */}
           <td>
-                <button className="btn btn-primary" onClick={()=>{this.seleccionarEmpresa(empresa); this.modalInsertar()}}><FontAwesomeIcon icon={faEdit}/></button>
+                <button className="btn btn-primary" ><FontAwesomeIcon icon={faEdit}/></button>
                 {"   "}
-                <button className="btn btn-danger" onClick={()=>{this.seleccionarEmpresa(empresa); this.setState({modalEliminar: true})}}><FontAwesomeIcon icon={faTrashAlt}/></button>
+                <button className="btn btn-danger" ><FontAwesomeIcon icon={faTrashAlt}/></button>
                 </td>
           </tr>
           )
@@ -135,13 +151,29 @@ console.log(this.state.form);
                     <input className="form-control" type="text" name="id" id="id" readOnly onChange={this.handleChange} value={form?form.id: this.state.data.length+1}/>
                     <br />
                     <label htmlFor="nombre">Nombre</label>
-                    <input className="form-control" type="text" name="nombre" id="nombre" onChange={this.handleChange} value={form?form.nombre: ''}/>
+                    <input className="form-control" type="text" name="nombre" id="nombre" onChange={this.handleChange} value={form?form.Nombre: ''}/>
                     <br />
-                    <label htmlFor="nombre">País</label>
-                    <input className="form-control" type="text" name="pais" id="pais" onChange={this.handleChange} value={form?form.pais: ''}/>
+                    <label htmlFor="apellido">Apellido</label>
+                    <input className="form-control" type="text" name="apellido" id="apellido" onChange={this.handleChange} value={form?form.Apellido: ''}/>
                     <br />
-                    <label htmlFor="capital_bursatil">Capital Bursatil</label>
-                    <input className="form-control" type="text" name="capital_bursatil" id="capital_bursatil" onChange={this.handleChange} value={form?form.capital_bursatil:''}/>
+                    <label htmlFor="tipodocumento">Tipo de documento de identidad</label>
+                    <input className="form-control" type="text" name="tipodocumento" id="tipodocumento" onChange={this.handleChange} value={form?form.Tipo_de_documento: ''}/>
+                    <br />
+                    <label htmlFor="documento de identidad">Documento de identidad</label>
+                    <input className="form-control" type="text" name="documentonum" id="documentonum" onChange={this.handleChange} value={form?form.Documento_de_identidad: ''}/>
+                    <br />
+                    <label htmlFor="correo_electronico">Correo Electrónico</label>
+                    <input className="form-control" type="text" name="correoelectro" id="correoelectro" onChange={this.handleChange} value={form?form.Correo_Electrónico: ''}/>
+                    <br />
+                    <label htmlFor="correo_electronico">Celular</label>
+                    <input className="form-control" type="text" name="celular" id="celular" onChange={this.handleChange} value={form?form.Celular: ''}/>
+                    <br />
+                    <label htmlFor="fechanacimiento">Fecha de Nacimiento</label>
+                    <input className="form-control" type="text" name="fechanacimiento" id="fechanacimiento" onChange={this.handleChange} value={form?form.Fecha_de_Nacimiento: ''}/>
+                    <br />    
+                    <label htmlFor="url">url</label>
+                    <input className="form-control" type="text" name="url" id="url" onChange={this.handleChange} value={form?form.url: ''}/>
+                    <br />                
                   </div>
                 </ModalBody>
 
